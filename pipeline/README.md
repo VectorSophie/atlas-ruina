@@ -33,3 +33,14 @@ Currently covers Chapter 1 cards, key pages, and enemies as a proof of the full 
 pattern (parse → localize → cross-reference → resolve art → emit). Remaining chapters and
 entity types (Abnormality, Passive, Stage, Story) follow the same pattern and are tracked as
 a follow-up plan.
+
+A real run against Chapter 1 source data produces 29 cards, 15 key pages, and 16 enemies —
+use these as a sanity check against your own local run.
+
+## Known limitations
+
+Art resolution is currently very low (~1 of 29 cards, ~3%). This is a source-data
+characteristic, not a pipeline defect: most `Card.Artwork` XML values don't match any actual
+filename in the raw Unity Texture2D/Sprite dump. Only motion-suffixed shared sprites and a
+handful of specially-illustrated cards resolve today. Improving the filename-matching
+heuristic to close this gap is tracked as follow-up work.
