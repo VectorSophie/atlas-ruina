@@ -12,20 +12,22 @@ export function parseKeyPageFile(
   return bookNodes.map((node): KeyPage => {
     const id = String(node["@_ID"]);
     const loc = localization.get(id);
-    const effect = node.EquipEffect ?? {};
+    const effect = node.EquipEffect;
 
     return {
       id,
       name: loc?.name || String(node.Name ?? ""),
-      desc: {
-        hp: Number(effect.HP ?? 0),
-        breakStat: Number(effect.Break ?? 0),
-        speedMin: Number(effect.SpeedMin ?? 0),
-        speed: Number(effect.Speed ?? 0),
-        sResist: String(effect.SResist ?? ""),
-        pResist: String(effect.PResist ?? ""),
-        hResist: String(effect.HResist ?? ""),
-      },
+      desc: effect
+        ? {
+            hp: Number(effect.HP ?? 0),
+            breakStat: Number(effect.Break ?? 0),
+            speedMin: Number(effect.SpeedMin ?? 0),
+            speed: Number(effect.Speed ?? 0),
+            sResist: String(effect.SResist ?? ""),
+            pResist: String(effect.PResist ?? ""),
+            hResist: String(effect.HResist ?? ""),
+          }
+        : null,
       paragraphs: loc?.paragraphs ?? [],
       bookIcon: String(node.BookIcon ?? ""),
       rarity: String(node.Rarity ?? ""),

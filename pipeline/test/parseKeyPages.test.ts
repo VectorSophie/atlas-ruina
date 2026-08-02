@@ -35,4 +35,15 @@ describe("parseKeyPageFile", () => {
       characterSkin: "Lenny",
     });
   });
+
+  it("returns a null desc when the Book has no EquipEffect element", () => {
+    const localization = loadBookLocalization(path.join(fixtures, "EN_Books_sample.txt"));
+    const pages = parseKeyPageFile(
+      path.join(fixtures, "EquipPage_no_effect_sample.txt"),
+      localization
+    );
+
+    expect(pages).toHaveLength(1);
+    expect(pages[0].desc).toBeNull();
+  });
 });

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BookXmlRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Book ID="200002">
+		<Name>테스트</Name>
+		<TextId>200002</TextId>
+		<BookIcon>Rats</BookIcon>
+		<Rarity>Common</Rarity>
+		<Chapter>1</Chapter>
+		<Episode>2</Episode>
+		<CharacterSkin>Lenny</CharacterSkin>
+	</Book>
+</BookXmlRoot>
