@@ -22,10 +22,14 @@ function main(): void {
   const names = loadNameMap(en("EN_CharactersName.txt"));
 
   // Chapter 1 only for now — proves the parse→localize→cross-reference→resolve-art→emit
-  // pattern end to end. Remaining chapters and entity types are follow-up work.
+  // pattern end to end. Remaining chapters are follow-up work.
   const cards = parseCardFile(kr("CardInfo_ch1.txt"), cardLocalization);
   const keyPages = parseKeyPageFile(kr("EquipPage_ch1.txt"), bookLocalization);
   const enemies = parseEnemyFile(kr("EnemyUnitInfo.txt"), names);
+  // Note: enemies' bookId/deckId point into EquipPage_enemy_*.txt and Deck_enemy_*.txt —
+  // a different file family than keyPages/cards above (not just "more chapters" of the
+  // same files) — and deckId is one indirection removed (a deck list of card IDs, not a
+  // card ID itself). Resolving these cross-references needs new parsers, out of scope here.
 
   const artIndex = buildArtIndex(config.artRoots);
   for (const card of cards) {

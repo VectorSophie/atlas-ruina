@@ -44,3 +44,10 @@ characteristic, not a pipeline defect: most `Card.Artwork` XML values don't matc
 filename in the raw Unity Texture2D/Sprite dump. Only motion-suffixed shared sprites and a
 handful of specially-illustrated cards resolve today. Improving the filename-matching
 heuristic to close this gap is tracked as follow-up work.
+
+`enemies.json`'s `bookId`/`deckId` fields are not yet resolvable against `keypages.json`/
+`cards.json`. They point into a different file family (`EquipPage_enemy_*.txt`,
+`Deck_enemy_*.txt`) than the ones this pipeline currently parses, and `deckId` is one
+indirection removed — it names a deck list of card IDs, not a card ID itself. Resolving these
+needs new parsers for that file family, not just "more chapters" of the current ones; tracked
+as follow-up work alongside the remaining entity types.
