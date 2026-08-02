@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BattleCardDescRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <cardDescList>
+    <BattleCardDesc ID="100001">
+      <LocalizedName>Flowing Strike</LocalizedName>
+      <Ability />
+    </BattleCardDesc>
+    <BattleCardDesc ID="100002">
+      <LocalizedName>Stab</LocalizedName>
+      <Ability />
+    </BattleCardDesc>
+  </cardDescList>
+</BattleCardDescRoot>

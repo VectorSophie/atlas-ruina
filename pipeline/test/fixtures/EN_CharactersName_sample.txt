@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CharactersNameRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name ID="11">Mang-chi</Name>
+  <Name ID="12">Lenny</Name>
+  <Name ID="13">Pete</Name>
+</CharactersNameRoot>
