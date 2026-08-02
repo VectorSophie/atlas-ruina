@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BookXmlRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Book ID="200001">
+		<Name>레니</Name>
+		<TextId>200001</TextId>
+		<EquipEffect>
+      <HP>42</HP>
+      <Break>22</Break>
+			<SpeedMin>1</SpeedMin>
+			<Speed>4</Speed>
+			<SResist>Normal</SResist>
+			<PResist>Vulnerable</PResist>
+			<HResist>Weak</HResist>
+			<SBResist>Normal</SBResist>
+			<PBResist>Vulnerable</PBResist>
+			<HBResist>Weak</HBResist>
+		</EquipEffect>
+		<BookIcon>Rats</BookIcon>
+		<Rarity>Common</Rarity>
+		<Chapter>1</Chapter>
+		<Episode>2</Episode>
+		<CharacterSkin>Lenny</CharacterSkin>
+	</Book>
+</BookXmlRoot>
