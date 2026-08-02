@@ -9,5 +9,12 @@
       </TextList>
       <PassiveList />
     </BookDesc>
+    <BookDesc BookID="21">
+      <BookName>Someone's Page</BookName>
+      <TextList>
+        <Desc>This is a different chapter's key page.</Desc>
+      </TextList>
+      <PassiveList />
+    </BookDesc>
   </bookDescList>
 </BookDescRoot>

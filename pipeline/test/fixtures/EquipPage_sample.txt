@@ -21,4 +21,25 @@
 		<Episode>2</Episode>
 		<CharacterSkin>Lenny</CharacterSkin>
 	</Book>
+	<Book ID="211001">
+		<Name>다른 인물</Name>
+		<TextId>21</TextId>
+		<EquipEffect>
+			<HP>10</HP>
+			<Break>5</Break>
+			<SpeedMin>2</SpeedMin>
+			<Speed>3</Speed>
+			<SResist>Weak</SResist>
+			<PResist>Normal</PResist>
+			<HResist>Vulnerable</HResist>
+			<SBResist>Normal</SBResist>
+			<PBResist>Vulnerable</PBResist>
+			<HBResist>Weak</HBResist>
+		</EquipEffect>
+		<BookIcon>Foxes</BookIcon>
+		<Rarity>Common</Rarity>
+		<Chapter>2</Chapter>
+		<Episode>1</Episode>
+		<CharacterSkin>Someone</CharacterSkin>
+	</Book>
 </BookXmlRoot>

@@ -12,7 +12,7 @@ describe("parseKeyPageFile", () => {
     const localization = loadBookLocalization(path.join(fixtures, "EN_Books_sample.txt"));
     const pages = parseKeyPageFile(path.join(fixtures, "EquipPage_sample.txt"), localization);
 
-    expect(pages).toHaveLength(1);
+    expect(pages).toHaveLength(2);
     expect(pages[0]).toEqual({
       id: "200001",
       name: "Lenny's Page",
@@ -34,6 +34,18 @@ describe("parseKeyPageFile", () => {
       chapter: 1,
       characterSkin: "Lenny",
     });
+  });
+
+  it("joins localization via TextId even when it differs from the Book's own ID", () => {
+    const localization = loadBookLocalization(path.join(fixtures, "EN_Books_sample.txt"));
+    const pages = parseKeyPageFile(path.join(fixtures, "EquipPage_sample.txt"), localization);
+
+    expect(pages).toHaveLength(2);
+    const secondPage = pages[1];
+    // Book ID="211001" but TextId="21" — localization is keyed by BookID="21".
+    expect(secondPage.id).toBe("211001");
+    expect(secondPage.name).toBe("Someone's Page");
+    expect(secondPage.paragraphs).toEqual(["This is a different chapter's key page."]);
   });
 
   it("returns a null desc when the Book has no EquipEffect element", () => {

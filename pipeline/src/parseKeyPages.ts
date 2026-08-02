@@ -11,7 +11,8 @@ export function parseKeyPageFile(
 
   return bookNodes.map((node): KeyPage => {
     const id = String(node["@_ID"]);
-    const loc = localization.get(id);
+    const localizationId = String(node.TextId ?? node["@_ID"]);
+    const loc = localization.get(localizationId);
     const effect = node.EquipEffect;
 
     return {
