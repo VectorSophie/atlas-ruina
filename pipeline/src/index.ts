@@ -21,6 +21,8 @@ function main(): void {
   const bookLocalization = loadBookLocalization(en("EN_Books.txt"));
   const names = loadNameMap(en("EN_CharactersName.txt"));
 
+  // Chapter 1 only for now — proves the parse→localize→cross-reference→resolve-art→emit
+  // pattern end to end. Remaining chapters and entity types are follow-up work.
   const cards = parseCardFile(kr("CardInfo_ch1.txt"), cardLocalization);
   const keyPages = parseKeyPageFile(kr("EquipPage_ch1.txt"), bookLocalization);
   const enemies = parseEnemyFile(kr("EnemyUnitInfo.txt"), names);
