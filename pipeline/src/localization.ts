@@ -24,8 +24,8 @@ export function loadBookLocalization(filePath: string): Map<string, BookLocaliza
   for (const entry of entries) {
     const id = String(entry["@_BookID"]);
     const name = typeof entry.BookName === "string" ? entry.BookName : "";
-    const paragraphs = toArray<string>(entry.TextList?.Desc).filter(
-      (p): p is string => typeof p === "string"
+    const paragraphs = toArray<string>(entry.TextList?.Desc).map((p) =>
+      typeof p === "string" ? p : ""
     );
     map.set(id, { name, paragraphs });
   }
@@ -38,7 +38,8 @@ export function loadNameMap(filePath: string): Map<string, string> {
   const map = new Map<string, string>();
   for (const entry of entries) {
     const id = String(entry["@_ID"]);
-    const name = typeof entry["#text"] === "string" ? entry["#text"] : String(entry ?? "");
+    const rawName = typeof entry === "string" ? entry : entry?.["#text"];
+    const name = typeof rawName === "string" ? rawName : "";
     map.set(id, name);
   }
   return map;

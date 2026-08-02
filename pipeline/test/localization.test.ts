@@ -36,4 +36,9 @@ describe("loadNameMap", () => {
     expect(map.get("12")).toBe("Lenny");
     expect(map.get("13")).toBe("Pete");
   });
+
+  it("maps a self-closing/empty entry to an empty string, not '[object Object]'", () => {
+    const map = loadNameMap(path.join(fixtures, "EN_CharactersName_sample.txt"));
+    expect(map.get("14")).toBe("");
+  });
 });

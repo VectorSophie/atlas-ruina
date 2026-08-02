@@ -3,4 +3,5 @@
   <Name ID="11">Mang-chi</Name>
   <Name ID="12">Lenny</Name>
   <Name ID="13">Pete</Name>
+  <Name ID="14"/>
 </CharactersNameRoot>
