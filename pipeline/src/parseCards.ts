@@ -12,7 +12,7 @@ export function parseCardFile(filePath: string, localization: Map<string, string
       min: Number(b["@_Min"]),
       dice: Number(b["@_Dice"]),
       type: String(b["@_Type"]),
-      detail: String(b["@_Detail"]),
+      detail: String(b["@_Detail"] ?? ""),
       motion: String(b["@_Motion"]),
     }));
 

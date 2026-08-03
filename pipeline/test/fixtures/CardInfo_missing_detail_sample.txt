@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiceCardXmlRoot xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Card ID="704201">
+    <Name>무제</Name>
+    <Artwork>ch7_1</Artwork>
+    <Rarity>Unique</Rarity>
+    <Spec Range="Near" Cost="1" />
+    <Script />
+    <ScriptDesc />
+    <BehaviourList>
+      <Behaviour Min="4" Dice="7" Type="Atk" Motion="S2" EffectRes="" Script="" Desc="" />
+    </BehaviourList>
+    <Chapter>7</Chapter>
+    <Priority>0</Priority>
+  </Card>
+</DiceCardXmlRoot>

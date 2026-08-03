@@ -38,4 +38,12 @@ describe("parseCardFile", () => {
     );
     expect(cards[0].name).toBe("흘려치기");
   });
+
+  it("defaults a behaviour's detail to an empty string when the XML attribute is absent, not the literal string 'undefined'", () => {
+    const cards = parseCardFile(
+      path.join(fixtures, "CardInfo_missing_detail_sample.txt"),
+      new Map()
+    );
+    expect(cards[0].behaviours[0].detail).toBe("");
+  });
 });
