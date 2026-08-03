@@ -1,5 +1,8 @@
 import { readXml, toArray } from "./xml.js";
 
+// Returns a Map (not an array like parseCardFile/parseKeyPageFile/parseEnemyFile) because
+// decks are only ever consumed as a lookup by Enemy.deckId, never iterated as top-level
+// records — matching loadNameMap/loadCardLocalization's lookup-table convention.
 export function parseDeckFile(filePath: string): Map<string, string[]> {
   const doc = readXml(filePath);
   const deckNodes = toArray<any>(doc.DeckXmlRoot?.Deck);
