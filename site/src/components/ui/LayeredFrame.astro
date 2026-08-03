@@ -13,6 +13,8 @@ const { class: className } = Astro.props;
     border-style: solid;
     border-width: 16px;
     border-image-source: url("/ui/frame.png");
+    /* "fill" also paints frame.png's center region as the wrapped content's background —
+       intentional for a card-panel look, not just a border. */
     border-image-slice: 32 fill;
     border-image-width: 16px;
     border-image-repeat: stretch;
