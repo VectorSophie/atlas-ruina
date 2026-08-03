@@ -31,6 +31,8 @@ export function parseAbnormalityCodexFile(filePath: string): AbnormalityCodexEnt
         abnormality: String(card.Abnormality ?? ""),
         cardName: String(card.CardName ?? ""),
         abilityDesc: String(card.AbilityDesc ?? ""),
+        // "FlaborText" is a genuine typo in the source XML tag name, not a bug here —
+        // preserved on read, correctly spelled on the output field below.
         flavorText: String(card.FlaborText ?? ""),
         dialogues: dialogueNodes,
       });
