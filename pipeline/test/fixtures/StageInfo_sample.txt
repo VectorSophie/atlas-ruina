@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<StageXmlRoot>
+  <Stage id="1">
+    <Wave>
+      <Unit>1</Unit>
+      <Unit>1</Unit>
+    </Wave>
+    <FloorNum>1</FloorNum>
+  </Stage>
+  <Stage id="2">
+    <Name>쥐</Name>
+    <Wave>
+      <Formation>2</Formation>
+      <Unit>3</Unit>
+      <Unit>1</Unit>
+      <Unit>2</Unit>
+    </Wave>
+    <FloorNum>1</FloorNum>
+    <Chapter>1</Chapter>
+    <StoryType>Rats</StoryType>
+    <Story Condition="Start">1_2_1</Story>
+    <Story Condition="End">1_2_2</Story>
+  </Stage>
+</StageXmlRoot>
