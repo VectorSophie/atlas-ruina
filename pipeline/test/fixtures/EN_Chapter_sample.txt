@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScenarioRoot xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Chapter ID="1">
+    <Title>Chapter 1-Canard-'I go out to the street, my hands in my pockets.'</Title>
+  </Chapter>
+  <Group>
+    <GroupName>Prologue</GroupName>
+    <Episode>
+      <EpisodeName>Episode 1</EpisodeName>
+      <Place>
+        <PlaceName>Location: Inside the Library</PlaceName>
+        <Dialog ID="0" Model="앤젤라">
+          <Teller>???</Teller>
+          <Title>???</Title>
+          <VoiceFile>ch1_prol1_ep1_angela1</VoiceFile>
+          <Content>I still cannot leave this place...</Content>
+        </Dialog>
+        <Dialog ID="1" Model="롤랑">
+          <Teller>???</Teller>
+          <Title>???</Title>
+          <VoiceFile>ch1_prol1_ep1_roland1</VoiceFile>
+          <Content>Damn it... The Purple Tear...</Content>
+        </Dialog>
+      </Place>
+    </Episode>
+  </Group>
+</ScenarioRoot>
