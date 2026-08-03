@@ -1,0 +1,53 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} — LOR Archive</title>
+    <style is:global>
+      @font-face {
+        font-family: "Arita Buri";
+        src: url("/fonts/Arita-buriM.otf") format("opentype");
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Railway";
+        src: url("/fonts/Railway.otf") format("opentype");
+        font-display: swap;
+      }
+
+      :root {
+        --color-bg: #14100f;
+        --color-panel: #201a17;
+        --color-text: #e8ddce;
+        --color-accent: #a9282f;
+        --font-display: "Arita Buri", serif;
+        --font-body: "Railway", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-family: var(--font-body);
+      }
+
+      h1, h2, h3 {
+        font-family: var(--font-display);
+      }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
