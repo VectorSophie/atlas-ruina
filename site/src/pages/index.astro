@@ -1,6 +1,25 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
-<html>
-  <head><title>LOR Archive</title></head>
-  <body><h1>LOR Archive</h1></body>
-</html>
+<BaseLayout title="Library">
+  <main class="home-page">
+    <h1>Library of Ruina Archive</h1>
+    <p>An unofficial archive of Library of Ruina's game data.</p>
+    <nav>
+      <a href="/cards/">Cards</a>
+    </nav>
+  </main>
+</BaseLayout>
+
+<style>
+  .home-page {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 24px;
+    text-align: center;
+  }
+  nav a {
+    color: var(--color-accent);
+    font-size: 1.2rem;
+  }
+</style>
