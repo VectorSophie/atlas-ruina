@@ -39,10 +39,12 @@ change if the source data does, so this README doesn't hardcode them.
 
 ## Known limitations
 
-- **Art resolution rate is low** (a few percent of cards). This is a source-data
-  characteristic, not a pipeline defect: most `Card.Artwork` XML values don't match any actual
-  filename in the raw Unity Texture2D/Sprite dump. Only motion-suffixed shared sprites and a
-  handful of specially-illustrated cards resolve today.
+- **Art resolution rate is ~40%** (651 of 1641 cards, verified against a real full-coverage
+  run). Many cards' `Card.Artwork` XML values don't match any actual filename in the raw Unity
+  Texture2D/Sprite dump — some cards use shared motion sprites with no unique per-card art,
+  which is a source-data characteristic, not a pipeline defect. The rate varies noticeably by
+  chapter/card type (early-chapter common cards resolve far less often than later-chapter or
+  special/creature cards, which tend to have dedicated art).
 - **Story scene staging (background/BGM/character-art cues) is not yet linked to the narrative
   text.** `story.json` (from `EN_Chapter*.txt`) has the actual dialogue lines. The separate
   `Chapter_X_Y_Z.txt` files hold scene staging (background, BGM, character position/emotion)
