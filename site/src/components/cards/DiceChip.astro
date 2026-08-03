@@ -2,16 +2,19 @@
 import type { CardBehaviour } from "../../lib/cards.js";
 import { diceRange } from "../../lib/cards.js";
 
+const KNOWN_DICE_SIZES = new Set([4, 6, 8, 12, 20]);
+
 interface Props {
   behaviour: CardBehaviour;
 }
 const { behaviour } = Astro.props;
 const [min, max] = diceRange(behaviour);
+const hasDieSprite = KNOWN_DICE_SIZES.has(behaviour.dice);
 ---
 <div class="dice-chip" data-type={behaviour.type}>
   <div class="dice-chip__art">
     <img src="/ui/DiceCard.png" alt="" class="dice-chip__base" />
-    <img src={`/ui/Dice_${behaviour.dice}.png`} alt="" class="dice-chip__die" />
+    {hasDieSprite && <img src={`/ui/Dice_${behaviour.dice}.png`} alt="" class="dice-chip__die" />}
   </div>
   <div class="dice-chip__label">
     <span class="dice-chip__range">{min}–{max}</span>
