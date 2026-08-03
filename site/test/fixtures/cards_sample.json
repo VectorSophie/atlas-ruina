@@ -1,0 +1,29 @@
+[
+  {
+    "id": "100001",
+    "name": "Dodge and Strike",
+    "artwork": "ch1_1",
+    "artworkPath": null,
+    "rarity": "Common",
+    "range": "Near",
+    "cost": 0,
+    "chapter": 1,
+    "behaviours": [
+      { "min": 1, "dice": 4, "type": "Def", "detail": "Evasion", "motion": "E" },
+      { "min": 1, "dice": 2, "type": "Atk", "detail": "Slash", "motion": "H" }
+    ]
+  },
+  {
+    "id": "102003",
+    "name": "Struggle",
+    "artwork": "Yun6",
+    "artworkPath": "art/102003.png",
+    "rarity": "Rare",
+    "range": "Far",
+    "cost": 2,
+    "chapter": 1,
+    "behaviours": [
+      { "min": 3, "dice": 6, "type": "Atk", "detail": "Penetrate", "motion": "Z" }
+    ]
+  }
+]
