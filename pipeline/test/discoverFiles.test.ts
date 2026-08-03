@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { listFilesByPrefix } from "../src/discoverFiles.js";
@@ -12,6 +12,7 @@ beforeAll(() => {
   writeFileSync(path.join(root, "CardInfo_ch2.txt"), "");
   writeFileSync(path.join(root, "EquipPage_ch1.txt"), "");
   writeFileSync(path.join(root, "CardInfoJan.txt"), "");
+  mkdirSync(path.join(root, "CardInfoSubdir"));
 });
 
 afterAll(() => {
@@ -30,5 +31,10 @@ describe("listFilesByPrefix", () => {
 
   it("returns an empty array when nothing matches", () => {
     expect(listFilesByPrefix(root, "NoSuchPrefix")).toEqual([]);
+  });
+
+  it("excludes directories, even when their name matches the prefix", () => {
+    const result = listFilesByPrefix(root, "CardInfo");
+    expect(result).not.toContain(path.join(root, "CardInfoSubdir"));
   });
 });
