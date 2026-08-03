@@ -18,7 +18,8 @@ npm run parse
 ```
 
 Output lands in `pipeline/data/`:
-- `cards.json`, `keypages.json`, `enemies.json` — parsed, English-localized records
+- `cards.json`, `keypages.json`, `enemies.json`, `passives.json`, `stages.json`, `story.json`,
+  `abnormalityCodex.json` — parsed, English-localized records
 - `art/` — copied art files, one per record that had a resolvable sprite/texture
 
 ## Test
@@ -50,6 +51,9 @@ change if the source data does, so this README doesn't hardcode them.
   kind of silent-wrong-pairing bug the `EquipPage` `TextId` fix addressed. Deferred until the
   site's Story reader UI defines what it actually needs from staging data.
 - **Enemy key pages/decks for the `_creature` (Abnormality) family use the same file families**
-  as regular enemies (`EquipPage_creature_*.txt`, `Deck_creature*.txt`) and are included in
-  this pass's full-coverage glob — no separate handling needed, confirmed by the schema checks
-  done during design.
+  as regular enemies (`EquipPage_creature_*.txt`, `Deck_creature*.txt`), confirmed by the schema
+  checks done during design. However, ~23% of creature/abnormality enemies with a `deckId`
+  (56 of 244) don't resolve to any known deck — their `deckId` values genuinely don't appear in
+  any `Deck_creature*.txt` file. `deckCardIds` degrades to an empty array for these rather than
+  erroring, which is correct handling, but the underlying deck data for these enemies may not
+  exist in this source dump. Not yet investigated further.
