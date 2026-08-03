@@ -133,10 +133,13 @@ function main(): void {
   }
 
   // Resolve Enemy.deckId -> actual card ID list, now that decks are parsed.
-  const enemiesWithDecks: EnemyWithDeck[] = enemies.map((enemy) => ({
+  const rawEnemiesWithDecks: EnemyWithDeck[] = enemies.map((enemy) => ({
     ...enemy,
     deckCardIds: decks.get(enemy.deckId) ?? [],
   }));
+  // Dedupe by id: some enemies (e.g. seasonal event units) are defined identically
+  // across multiple EnemyUnitInfo_* files.
+  const enemiesWithDecks = dedupeById(rawEnemiesWithDecks, "enemies");
 
   // --- Passives: every PassiveList* file, localization resolved per-file the same way
   // as Cards (ch7 boss passives split across per-boss EN_PassiveDesc_Ch7_*.txt files). ---
@@ -158,9 +161,13 @@ function main(): void {
     "passives"
   );
 
-  // --- Stages: every StageInfo* file. ---
+  // --- Stages: every StageInfo* file. Dedupe by id: some ids collide across files
+  // (e.g. a shared low id reused by an unrelated stage in a different StageInfo*
+  // variant) -- dedupeById logs a warning when the colliding records genuinely
+  // differ, so this is a safety net, not a silent data-loss step. ---
   const stageFiles = listFilesByPrefix(config.textRoot, "StageInfo");
-  const stages = stageFiles.flatMap((f) => parseStageFile(f));
+  const rawStages = stageFiles.flatMap((f) => parseStageFile(f));
+  const stages = dedupeById(rawStages, "stages");
 
   // --- Story: every EN_Chapter* file (self-contained, no join needed). ---
   const storyFiles = listFilesByPrefix(englishDir, "EN_Chapter");
