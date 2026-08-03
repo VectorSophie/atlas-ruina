@@ -37,9 +37,19 @@ plus Decks, Passives, Stages, Story (narrative text), and the Abnormality codex.
 Run `npm run parse` and check the console summary line for current record counts — they'll
 change if the source data does, so this README doesn't hardcode them.
 
+Every output file is deduped by id (`dedupeById()` in `src/index.ts`) — a handful of ids are
+legitimately defined more than once across source files (e.g. a seasonal-event enemy repeated
+across chapter files, or a card also present in a boss's alternate-phase file). Duplicates with
+identical content are silently merged; a `console.warn` fires during `npm run parse` if two
+records for the same id ever have *different* content, since that would mean a real data
+conflict worth investigating, not a harmless re-definition. `CardInfo_ch1.txt`'s companion
+`CardInfoJan.txt` is excluded from parsing entirely — it's leftover dev-prototype data (a
+different, older XML schema with literal placeholder card names) that both produced corrupted
+records of its own and collided with 6 real chapter-1 card ids.
+
 ## Known limitations
 
-- **Art resolution rate is ~40%** (651 of 1641 cards, verified against a real full-coverage
+- **Art resolution rate is ~40%** (651 of 1613 cards, verified against a real full-coverage
   run). Many cards' `Card.Artwork` XML values don't match any actual filename in the raw Unity
   Texture2D/Sprite dump — some cards use shared motion sprites with no unique per-card art,
   which is a source-data characteristic, not a pipeline defect. The rate varies noticeably by
