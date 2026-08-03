@@ -8,8 +8,10 @@ const { card } = Astro.props;
 ---
 <a class="card-tile" href={`/cards/${card.id}/`}>
   {
-    card.artworkPath && (
+    card.artworkPath ? (
       <img class="card-tile__art" src={`/${card.artworkPath}`} alt={card.name} />
+    ) : (
+      <div class="card-tile__art card-tile__art--placeholder" aria-hidden="true" />
     )
   }
   <div class="card-tile__body">
@@ -35,6 +37,9 @@ const { card } = Astro.props;
     object-fit: cover;
     display: block;
     background: #000;
+  }
+  .card-tile__art--placeholder {
+    background: linear-gradient(135deg, var(--color-panel), var(--color-bg));
   }
   .card-tile__body {
     padding: 8px;
