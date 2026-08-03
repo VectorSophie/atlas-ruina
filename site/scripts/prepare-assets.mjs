@@ -34,8 +34,8 @@ function main() {
   copyFileSync(path.join(textureDir, "frame.png"), path.join(uiOutDir, "frame.png"));
   copyFileSync(path.join(textureDir, "DiceCard.png"), path.join(uiOutDir, "DiceCard.png"));
 
-  for (const size of [4, 6, 8, 12, 20]) {
-    const name = `Dice_${size}.png`;
+  for (const detail of ["Evade", "Guard", "Hit", "Penetrate", "Slash"]) {
+    const name = `BehaviourDetail_${detail}.png`;
     copyFileSync(path.join(spriteDir, name), path.join(uiOutDir, name));
   }
 

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadCardsFrom, diceRange, hasDieSprite } from "../src/lib/cards.js";
+import { loadCardsFrom, diceRange, detailIconName } from "../src/lib/cards.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixture = path.join(__dirname, "fixtures", "cards_sample.json");
@@ -26,16 +26,24 @@ describe("diceRange", () => {
   });
 });
 
-describe("hasDieSprite", () => {
-  it("returns true for die sizes with a matching sprite (4, 6, 8, 12, 20)", () => {
-    for (const dice of [4, 6, 8, 12, 20]) {
-      expect(hasDieSprite({ min: 1, dice, type: "Atk", detail: "Hit", motion: "Z" })).toBe(true);
+describe("detailIconName", () => {
+  it("maps a behaviour's detail to its icon sprite name, verbatim for most types", () => {
+    for (const detail of ["Guard", "Hit", "Penetrate", "Slash"]) {
+      expect(
+        detailIconName({ min: 1, dice: 4, type: "Atk", detail, motion: "Z" })
+      ).toBe(`BehaviourDetail_${detail}`);
     }
   });
 
-  it("returns false for die sizes with no matching sprite", () => {
-    for (const dice of [1, 2, 3, 5, 7, 9, 30]) {
-      expect(hasDieSprite({ min: 1, dice, type: "Atk", detail: "Hit", motion: "Z" })).toBe(false);
-    }
+  it("maps 'Evasion' to the 'Evade' sprite, the one real naming mismatch between the game's data field and its sprite file name", () => {
+    expect(
+      detailIconName({ min: 1, dice: 4, type: "Def", detail: "Evasion", motion: "E" })
+    ).toBe("BehaviourDetail_Evade");
+  });
+
+  it("returns null for an empty/unknown detail rather than guessing at a sprite name", () => {
+    expect(
+      detailIconName({ min: 4, dice: 7, type: "Atk", detail: "", motion: "S2" })
+    ).toBeNull();
   });
 });

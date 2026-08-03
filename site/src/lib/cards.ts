@@ -35,12 +35,19 @@ export function diceRange(behaviour: CardBehaviour): [number, number] {
   return [behaviour.min, behaviour.min + behaviour.dice - 1];
 }
 
-// Only these die face-counts have a matching Dice_{n}.png sprite in the extracted asset
-// dump (verified during design). Real behaviour.dice values range 1-30+, so most behaviours
-// have no matching sprite — hasDieSprite() lets consumers fall back to text-only display
-// instead of referencing a nonexistent image.
-const KNOWN_DICE_SIZES = new Set([4, 6, 8, 12, 20]);
+// Every real behaviour.detail value ("Guard", "Hit", "Penetrate", "Slash", "Evasion") has a
+// matching BehaviourDetail_*.png sprite in the extracted asset dump, confirmed against the
+// real card data (100% coverage, unlike per-die-size sprites which only exist for 5 of the
+// many real dice values). "Evasion" is the one field-name-vs-sprite-name mismatch: the sprite
+// is "BehaviourDetail_Evade.png", not "..._Evasion.png". A small number of real behaviours
+// (chapter 7 boss cards) have an empty detail due to a source-data gap — detailIconName()
+// returns null for those rather than guessing at a sprite name that doesn't exist.
+const DETAIL_ICON_OVERRIDES: Record<string, string> = {
+  Evasion: "Evade",
+};
 
-export function hasDieSprite(behaviour: CardBehaviour): boolean {
-  return KNOWN_DICE_SIZES.has(behaviour.dice);
+export function detailIconName(behaviour: CardBehaviour): string | null {
+  if (!behaviour.detail) return null;
+  const spriteDetail = DETAIL_ICON_OVERRIDES[behaviour.detail] ?? behaviour.detail;
+  return `BehaviourDetail_${spriteDetail}`;
 }
