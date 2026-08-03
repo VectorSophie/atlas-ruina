@@ -11,7 +11,12 @@ import { parseCardFile } from "./parseCards.js";
 import { parseKeyPageFile } from "./parseKeyPages.js";
 import { parseEnemyFile } from "./parseEnemies.js";
 import { parseDeckFile } from "./parseDecks.js";
-import { loadPassiveDescriptions, parsePassiveFile } from "./parsePassives.js";
+import {
+  loadPassiveDescriptions,
+  parsePassiveFile,
+  type Passive,
+  type PassiveDescription,
+} from "./parsePassives.js";
 import { parseStageFile } from "./parseStages.js";
 import { parseStoryFile } from "./parseStory.js";
 import { parseAbnormalityCodexFile } from "./parseAbnormalityCodex.js";
@@ -24,6 +29,46 @@ import type { Card } from "./types.js";
 function extractCardIds(filePath: string): string[] {
   const doc = readXml(filePath);
   return toArray<any>(doc.DiceCardXmlRoot?.Card).map((c) => String(c["@_ID"]));
+}
+
+function extractPassiveIds(filePath: string): string[] {
+  const doc = readXml(filePath);
+  return toArray<any>(doc.PassiveXmlRoot?.Passive).map((p) => String(p["@_ID"]));
+}
+
+// Shared by the Card and Passive resolution loops below: both need to discover the
+// correct localization file per structural file via real ID overlap (not filename
+// guessing), warn when the resolver has no confident match, cache the loaded
+// localization per resolved file path, and parse. Kept generic over both the
+// localization value type (L) and the parsed record type (T) so it can serve
+// Card (string) and Passive (PassiveDescription) alike.
+function resolveAndParse<T, L>(
+  structuralFiles: string[],
+  candidateFiles: string[],
+  extractIds: (filePath: string) => string[],
+  fallbackFile: string,
+  cache: Map<string, Map<string, L>>,
+  loadLocalization: (filePath: string) => Map<string, L>,
+  parseFile: (filePath: string, localization: Map<string, L>) => T[],
+  warnLabel: string
+): T[] {
+  return structuralFiles.flatMap((structuralFile) => {
+    const ids = extractIds(structuralFile);
+    const bestFile = pickBestLocalizationFile(ids, candidateFiles);
+    if (bestFile === null) {
+      console.warn(
+        `[${warnLabel}] No confident localization match for ${structuralFile}; falling back to ${fallbackFile}`
+      );
+    }
+    const localizationFile = bestFile ?? fallbackFile;
+
+    if (!cache.has(localizationFile)) {
+      cache.set(localizationFile, loadLocalization(localizationFile));
+    }
+    const localization = cache.get(localizationFile)!;
+
+    return parseFile(structuralFile, localization);
+  });
 }
 
 function main(): void {
@@ -46,37 +91,29 @@ function main(): void {
   const battleCardsCandidates = listFilesByPrefix(englishDir, "EN_BattleCards");
   const cardLocalizationCache = new Map<string, Map<string, string>>();
 
-  let cards: Card[] = [];
-  for (const structuralFile of cardStructuralFiles) {
-    const ids = extractCardIds(structuralFile);
-    const bestFile = pickBestLocalizationFile(ids, battleCardsCandidates);
-    if (bestFile === null) {
-      console.warn(
-        `[cards] No confident localization match for ${structuralFile}; falling back to EN_BattleCards.txt`
-      );
-    }
-    const localizationFile = bestFile ?? en("EN_BattleCards.txt");
-
-    if (!cardLocalizationCache.has(localizationFile)) {
-      cardLocalizationCache.set(localizationFile, loadCardLocalization(localizationFile));
-    }
-    const localization = cardLocalizationCache.get(localizationFile)!;
-
-    cards = cards.concat(parseCardFile(structuralFile, localization));
-  }
+  const cards: Card[] = resolveAndParse<Card, string>(
+    cardStructuralFiles,
+    battleCardsCandidates,
+    extractCardIds,
+    en("EN_BattleCards.txt"),
+    cardLocalizationCache,
+    loadCardLocalization,
+    parseCardFile,
+    "cards"
+  );
 
   // --- Key pages: every EquipPage_* file joins the single EN_Books.txt (verified —
   // there is only one localization file for this whole family, unlike Cards). ---
   const bookLocalization = loadBookLocalization(en("EN_Books.txt"));
   const keyPageFiles = listFilesByPrefix(config.textRoot, "EquipPage_");
-  let keyPages = keyPageFiles.flatMap((f) => parseKeyPageFile(f, bookLocalization));
+  const keyPages = keyPageFiles.flatMap((f) => parseKeyPageFile(f, bookLocalization));
 
   // --- Enemies: every EnemyUnitInfo_* file, name resolved via character/creature name maps. ---
   const characterNames = loadNameMap(en("EN_CharactersName.txt"));
   const creatureNames = loadNameMap(en("EN_CreatureName.txt"));
   const enemyNames = new Map([...characterNames, ...creatureNames]);
   const enemyFiles = listFilesByPrefix(config.textRoot, "EnemyUnitInfo");
-  let enemies = enemyFiles.flatMap((f) => parseEnemyFile(f, enemyNames));
+  const enemies = enemyFiles.flatMap((f) => parseEnemyFile(f, enemyNames));
 
   // --- Decks: every Deck_* file. ---
   const deckFiles = listFilesByPrefix(config.textRoot, "Deck_");
@@ -100,27 +137,18 @@ function main(): void {
     ...listFilesByPrefix(englishDir, "EN_CreaturePassive"),
   ];
   const passiveStructuralFiles = listFilesByPrefix(config.textRoot, "PassiveList");
-  const passiveDescCache = new Map<string, ReturnType<typeof loadPassiveDescriptions>>();
+  const passiveDescCache = new Map<string, Map<string, PassiveDescription>>();
 
-  let passives: ReturnType<typeof parsePassiveFile> = [];
-  for (const structuralFile of passiveStructuralFiles) {
-    const doc = readXml(structuralFile);
-    const ids = toArray<any>(doc.PassiveXmlRoot?.Passive).map((p) => String(p["@_ID"]));
-    const bestFile = pickBestLocalizationFile(ids, passiveDescCandidates);
-    if (bestFile === null) {
-      console.warn(
-        `[passives] No confident localization match for ${structuralFile}; falling back to EN_PassiveDesc.txt`
-      );
-    }
-    const localizationFile = bestFile ?? en("EN_PassiveDesc.txt");
-
-    if (!passiveDescCache.has(localizationFile)) {
-      passiveDescCache.set(localizationFile, loadPassiveDescriptions(localizationFile));
-    }
-    const descriptions = passiveDescCache.get(localizationFile)!;
-
-    passives = passives.concat(parsePassiveFile(structuralFile, descriptions));
-  }
+  const passives: Passive[] = resolveAndParse<Passive, PassiveDescription>(
+    passiveStructuralFiles,
+    passiveDescCandidates,
+    extractPassiveIds,
+    en("EN_PassiveDesc.txt"),
+    passiveDescCache,
+    loadPassiveDescriptions,
+    parsePassiveFile,
+    "passives"
+  );
 
   // --- Stages: every StageInfo* file. ---
   const stageFiles = listFilesByPrefix(config.textRoot, "StageInfo");
