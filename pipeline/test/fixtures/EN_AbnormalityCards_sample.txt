@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbnormalityCardsRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Sephirah SephirahType="Malkuth">
+    <AbnormalityCard ID="ScorchedGirl_Walk">
+      <Abnormality>Scorched Girl</Abnormality>
+      <CardName>Footfalls</CardName>
+      <AbilityDesc>[All Allies]
+When a librarian's HP is at 20% or lower, deal 30% of the target's Max HP as damage.</AbilityDesc>
+      <FlaborText>I am coming to you. You, who will be reduced to ash like me.</FlaborText>
+      <Dialogues>
+        <Dialogue ID="1">If I must perish, then join me.</Dialogue>
+        <Dialogue ID="2">It's just too sad to die alone...</Dialogue>
+      </Dialogues>
+    </AbnormalityCard>
+  </Sephirah>
+</AbnormalityCardsRoot>
