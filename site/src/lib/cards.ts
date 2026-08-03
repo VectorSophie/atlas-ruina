@@ -34,3 +34,13 @@ export function loadCards(): Card[] {
 export function diceRange(behaviour: CardBehaviour): [number, number] {
   return [behaviour.min, behaviour.min + behaviour.dice - 1];
 }
+
+// Only these die face-counts have a matching Dice_{n}.png sprite in the extracted asset
+// dump (verified during design). Real behaviour.dice values range 1-30+, so most behaviours
+// have no matching sprite — hasDieSprite() lets consumers fall back to text-only display
+// instead of referencing a nonexistent image.
+const KNOWN_DICE_SIZES = new Set([4, 6, 8, 12, 20]);
+
+export function hasDieSprite(behaviour: CardBehaviour): boolean {
+  return KNOWN_DICE_SIZES.has(behaviour.dice);
+}

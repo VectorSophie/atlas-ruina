@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadCardsFrom, diceRange } from "../src/lib/cards.js";
+import { loadCardsFrom, diceRange, hasDieSprite } from "../src/lib/cards.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixture = path.join(__dirname, "fixtures", "cards_sample.json");
@@ -23,5 +23,19 @@ describe("diceRange", () => {
     expect(diceRange({ min: 3, dice: 6, type: "Atk", detail: "Penetrate", motion: "Z" })).toEqual(
       [3, 8]
     );
+  });
+});
+
+describe("hasDieSprite", () => {
+  it("returns true for die sizes with a matching sprite (4, 6, 8, 12, 20)", () => {
+    for (const dice of [4, 6, 8, 12, 20]) {
+      expect(hasDieSprite({ min: 1, dice, type: "Atk", detail: "Hit", motion: "Z" })).toBe(true);
+    }
+  });
+
+  it("returns false for die sizes with no matching sprite", () => {
+    for (const dice of [1, 2, 3, 5, 7, 9, 30]) {
+      expect(hasDieSprite({ min: 1, dice, type: "Atk", detail: "Hit", motion: "Z" })).toBe(false);
+    }
   });
 });
