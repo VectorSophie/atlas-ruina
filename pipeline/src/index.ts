@@ -161,10 +161,14 @@ function main(): void {
     "passives"
   );
 
-  // --- Stages: every StageInfo* file. Dedupe by id: some ids collide across files
-  // (e.g. a shared low id reused by an unrelated stage in a different StageInfo*
-  // variant) -- dedupeById logs a warning when the colliding records genuinely
-  // differ, so this is a safety net, not a silent data-loss step. ---
+  // --- Stages: every StageInfo* file. Dedupe by id: verified one real collision
+  // (id 202004 in StageInfo_creature.txt) where a stray, incomplete duplicate stage
+  // entry was mislabeled with an id belonging to an earlier, legitimate stage in the
+  // same file -- "keep first occurrence" was manually confirmed correct for this
+  // case (the real stage that id belongs to already exists separately at 203004).
+  // dedupeById logs a warning if a future differing-content collision appears, since
+  // "keep first" is not a principled rule for which record is correct -- it should
+  // be manually re-verified the same way if that warning ever fires again. ---
   const stageFiles = listFilesByPrefix(config.textRoot, "StageInfo");
   const rawStages = stageFiles.flatMap((f) => parseStageFile(f));
   const stages = dedupeById(rawStages, "stages");
