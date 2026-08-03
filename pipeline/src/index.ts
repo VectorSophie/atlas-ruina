@@ -24,7 +24,7 @@ import { buildArtIndex, resolveArtPath } from "./resolveArt.js";
 import { listFilesByPrefix } from "./discoverFiles.js";
 import { pickBestLocalizationFile } from "./resolveLocalization.js";
 import { readXml, toArray } from "./xml.js";
-import type { Card } from "./types.js";
+import type { Card, EnemyWithDeck } from "./types.js";
 
 function extractCardIds(filePath: string): string[] {
   const doc = readXml(filePath);
@@ -124,7 +124,7 @@ function main(): void {
   }
 
   // Resolve Enemy.deckId -> actual card ID list, now that decks are parsed.
-  const enemiesWithDecks = enemies.map((enemy) => ({
+  const enemiesWithDecks: EnemyWithDeck[] = enemies.map((enemy) => ({
     ...enemy,
     deckCardIds: decks.get(enemy.deckId) ?? [],
   }));

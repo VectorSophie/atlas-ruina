@@ -29,25 +29,27 @@ npm test
 
 ## Status
 
-Currently covers Chapter 1 cards, key pages, and enemies as a proof of the full pipeline
-pattern (parse → localize → cross-reference → resolve art → emit). Remaining chapters and
-entity types (Abnormality, Passive, Stage, Story) follow the same pattern and are tracked as
-a follow-up plan.
+Covers all chapters and bosses for Cards, Key Pages, Enemies (with resolved deck card lists),
+plus Decks, Passives, Stages, Story (narrative text), and the Abnormality codex. Output is
+`pipeline/data/{cards,keypages,enemies,passives,stages,story,abnormalityCodex}.json`.
 
-A real run against Chapter 1 source data produces 29 cards, 15 key pages, and 16 enemies —
-use these as a sanity check against your own local run.
+Run `npm run parse` and check the console summary line for current record counts — they'll
+change if the source data does, so this README doesn't hardcode them.
 
 ## Known limitations
 
-Art resolution is currently very low (~1 of 29 cards, ~3%). This is a source-data
-characteristic, not a pipeline defect: most `Card.Artwork` XML values don't match any actual
-filename in the raw Unity Texture2D/Sprite dump. Only motion-suffixed shared sprites and a
-handful of specially-illustrated cards resolve today. Improving the filename-matching
-heuristic to close this gap is tracked as follow-up work.
-
-`enemies.json`'s `bookId`/`deckId` fields are not yet resolvable against `keypages.json`/
-`cards.json`. They point into a different file family (`EquipPage_enemy_*.txt`,
-`Deck_enemy_*.txt`) than the ones this pipeline currently parses, and `deckId` is one
-indirection removed — it names a deck list of card IDs, not a card ID itself. Resolving these
-needs new parsers for that file family, not just "more chapters" of the current ones; tracked
-as follow-up work alongside the remaining entity types.
+- **Art resolution rate is low** (a few percent of cards). This is a source-data
+  characteristic, not a pipeline defect: most `Card.Artwork` XML values don't match any actual
+  filename in the raw Unity Texture2D/Sprite dump. Only motion-suffixed shared sprites and a
+  handful of specially-illustrated cards resolve today.
+- **Story scene staging (background/BGM/character-art cues) is not yet linked to the narrative
+  text.** `story.json` (from `EN_Chapter*.txt`) has the actual dialogue lines. The separate
+  `Chapter_X_Y_Z.txt` files hold scene staging (background, BGM, character position/emotion)
+  but a verified, reliable way to link a specific staging entry to a specific narrative line
+  hasn't been established yet — building that link without a confirmed mapping risks the same
+  kind of silent-wrong-pairing bug the `EquipPage` `TextId` fix addressed. Deferred until the
+  site's Story reader UI defines what it actually needs from staging data.
+- **Enemy key pages/decks for the `_creature` (Abnormality) family use the same file families**
+  as regular enemies (`EquipPage_creature_*.txt`, `Deck_creature*.txt`) and are included in
+  this pass's full-coverage glob — no separate handling needed, confirmed by the schema checks
+  done during design.

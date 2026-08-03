@@ -52,3 +52,7 @@ export interface Enemy {
   maxHeight: number;
   exp: number;
 }
+
+export interface EnemyWithDeck extends Enemy {
+  deckCardIds: string[];
+}
