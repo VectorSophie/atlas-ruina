@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiceCardXmlRoot xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Card ID="1">
+    <Name>회피</Name>
+    <Artwork>evade</Artwork>
+    <Rarity>Common</Rarity>
+    <Spec Range="Near" Cost="0" />
+    <BehaviourList />
+    <Chapter>0</Chapter>
+  </Card>
+  <Card ID="500001">
+    <Name>진짜카드</Name>
+    <Artwork>real1</Artwork>
+    <Rarity>Common</Rarity>
+    <Spec Range="Near" Cost="0" />
+    <BehaviourList />
+    <Chapter>0</Chapter>
+  </Card>
+  <Card ID="500002">
+    <Name>진짜카드2</Name>
+    <Artwork>real2</Artwork>
+    <Rarity>Common</Rarity>
+    <Spec Range="Near" Cost="0" />
+    <BehaviourList />
+    <Chapter>0</Chapter>
+  </Card>
+</DiceCardXmlRoot>
