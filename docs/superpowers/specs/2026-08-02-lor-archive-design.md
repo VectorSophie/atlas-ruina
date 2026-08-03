@@ -152,15 +152,36 @@ stay as live CSS layers since they're cheap and need to be interactive/swappable
 Fonts used as-is from the extracted `Font`/`Fonts` folders: `Arita-buriM.otf` (Project Moon's
 signature UI font) for headers/UI chrome, `Railway.otf` for Latin body/UI text.
 
-## Site Architecture
+## Site Architecture (Phase 1b)
 
-- **IA**: Library (home) → bookshelves by chapter/city (Canard, Urban Myth, Urban Legend...)
-  → per-entity pages (Card, Key Page, Enemy, Abnormality) → Story reader (scene-by-scene,
-  driven by the dialogue script data, with character art/BGM cues) → full-text search across
-  all entity types.
-- **Stack**: Astro (static-first, ships zero JS by default, straightforward to hand-build
-  pixel UI components in), data baked in at build time from the pipeline's JSON output,
-  Pagefind for client-side search, deployed free on Cloudflare Pages or GitHub Pages.
+**Status:** Phase 1a (data pipeline, full coverage) is done and merged — 1641 cards, 625 key
+pages, 438 enemies, 809 passives, 135 stages, 10816 story lines, 154 abnormality codex entries,
+all real, English-localized JSON in `pipeline/data/`. This section covers Phase 1b, the site
+itself, which hasn't been started yet.
+
+- **Routes**: `/` (Library home — bookshelves by chapter/city), `/cards/` + `/cards/[id]/`,
+  `/keypages/[id]/`, `/enemies/[id]/`, `/passives/[id]/`, `/stages/[id]/`,
+  `/abnormalities/[id]/` (codex entries), `/story/[chapterId]/` (reader), `/search/` (Pagefind).
+- **Story reader scope**: text-only for this pass — speaker, line, organized by
+  Group→Episode→Place, no background/character-art/BGM staging. The `Chapter_X_Y_Z.txt`
+  staging data isn't linked to the narrative text yet (see Pipeline's Known limitations) —
+  building that link without a confirmed mapping risks the same silent-wrong-pairing bug the
+  `EquipPage` `TextId` fix addressed. Visual upgrade deferred until/if that link gets solved.
+- **Data flow**: the site reads `pipeline/data/*.json` directly via relative path at build
+  time — `site/` and `pipeline/` are siblings in the same repo, so no copy step or env var is
+  needed for the JSON itself.
+- **Asset flow**: resolved card art, fonts (`Arita-buriM.otf`, `Railway.otf`), and UI chrome
+  sprites are NOT committed to git. A build script copies only the specific files each
+  component actually references from the local `lor-assets-unzipped` source dump (same
+  machine-local, gitignored pattern as `pipeline/.env`/`pipeline/data/`) into `site/public/`,
+  which is itself gitignored as a build artifact. This avoids redistributing hundreds of binary
+  game assets through git history while still shipping them in the deployed site output.
+- **Component structure**: a small shared "layer-stack" primitive library
+  (`LayeredFrame`/`BlendGlow`/`MaskedIllustration`, implementing the mask/blend/9-slice
+  techniques from the Visual System section above) that every entity-type component composes
+  from, rather than each page/entity type reinventing layering from scratch.
+- **Stack**: Astro (static-first, ships zero JS by default, straightforward to hand-build pixel
+  UI components in), Pagefind for client-side search, deployed to **Cloudflare Pages**.
 - **Why static**: the game is complete and its data won't change; no backend/database needed;
   matches the architecture of comparable community projects (retcons/limbus-storylogs,
   limbus-logs) which datamine game files directly into static sites.
