@@ -24,6 +24,7 @@ import { buildArtIndex, resolveArtPath } from "./resolveArt.js";
 import { listFilesByPrefix } from "./discoverFiles.js";
 import { pickBestLocalizationFile } from "./resolveLocalization.js";
 import { readXml, toArray } from "./xml.js";
+import { dedupeById } from "./dedupe.js";
 import type { Card, EnemyWithDeck } from "./types.js";
 
 function extractCardIds(filePath: string): string[] {
@@ -82,15 +83,17 @@ function main(): void {
 
   // --- Cards: discover every CardInfo_* structural file, resolve its correct
   // localization file by real ID overlap (not filename guessing — verified during
-  // design that filenames like "FinalBand" vs "BandFinal" don't line up), then parse. ---
-  const cardStructuralFiles = [
-    ...listFilesByPrefix(config.textRoot, "CardInfo_"),
-    ...listFilesByPrefix(config.textRoot, "CardInfoJan"),
-  ];
+  // design that filenames like "FinalBand" vs "BandFinal" don't line up), then parse.
+  // CardInfoJan.txt is deliberately excluded: verified it's leftover dev-prototype data
+  // (a different, older XML schema using Level/Rwbp instead of Min, with literal
+  // placeholder card names like "Wanna test something?") that both corrupts its own
+  // records (Min doesn't exist in that schema, producing null/undefined fields) and
+  // collides with 6 real chapter-1 card IDs, silently overwriting them at build time. ---
+  const cardStructuralFiles = listFilesByPrefix(config.textRoot, "CardInfo_");
   const battleCardsCandidates = listFilesByPrefix(englishDir, "EN_BattleCards");
   const cardLocalizationCache = new Map<string, Map<string, string>>();
 
-  const cards: Card[] = resolveAndParse<Card, string>(
+  const rawCards: Card[] = resolveAndParse<Card, string>(
     cardStructuralFiles,
     battleCardsCandidates,
     extractCardIds,
@@ -100,6 +103,12 @@ function main(): void {
     parseCardFile,
     "cards"
   );
+  // Some cards are legitimately defined in more than one source file with identical
+  // content (e.g. a chapter-7 card also appearing in its boss's alternate-phase file) —
+  // dedupe by id so every card is reachable at its own detail page, warning if two
+  // records for the same id ever differ (which would mean a real data conflict, not a
+  // harmless re-definition).
+  const cards = dedupeById(rawCards, "cards");
 
   // --- Key pages: every EquipPage_* file joins the single EN_Books.txt (verified —
   // there is only one localization file for this whole family, unlike Cards). ---
