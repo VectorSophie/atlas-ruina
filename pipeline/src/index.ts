@@ -78,7 +78,6 @@ function main(): void {
   mkdirSync(artOutDir, { recursive: true });
 
   const en = (name: string) => path.join(config.textRoot, "English", name);
-  const kr = (name: string) => path.join(config.textRoot, name);
   const englishDir = path.join(config.textRoot, "English");
 
   // --- Cards: discover every CardInfo_* structural file, resolve its correct
