@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { mkdirSync, copyFileSync, cpSync, existsSync } from "node:fs";
+import { mkdirSync, copyFileSync, cpSync, existsSync, rmSync } from "node:fs";
 import path from "node:path";
 
 function requireEnv(name) {
@@ -20,6 +20,10 @@ function main() {
   const fontOutDir = path.join(publicDir, "fonts");
   const uiOutDir = path.join(publicDir, "ui");
   const artOutDir = path.join(publicDir, "art");
+
+  for (const dir of [fontOutDir, uiOutDir, artOutDir]) {
+    rmSync(dir, { recursive: true, force: true });
+  }
 
   mkdirSync(fontOutDir, { recursive: true });
   mkdirSync(uiOutDir, { recursive: true });
