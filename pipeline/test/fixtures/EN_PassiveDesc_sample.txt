@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PassiveDescRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <PassiveDesc ID="1001011">
+    <Name>Scars</Name>
+    <Desc>Take 1-5 less damage from Slash attacks.</Desc>
+  </PassiveDesc>
+  <PassiveDesc ID="1001012">
+    <Name>Blood</Name>
+    <Desc>Lose 3 Speed. Boost the max value of Block dice by +3.</Desc>
+  </PassiveDesc>
+</PassiveDescRoot>
