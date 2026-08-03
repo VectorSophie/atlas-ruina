@@ -72,13 +72,27 @@ records — not just XML→JSON per file.
   (Enemy IDs) + `Formation` + `Story Condition="Start"/"End"` pointers into
   `Chapter_X_Y_Z.txt`. New parser. `StageInfo_creature.txt` reuses the same shape for
   Abnormality encounters.
-- **Dialogue/Story** (`Chapter_*.txt`, XML root `SceneEffect > Dialogue[@ID]`): per-scene
-  script — background (`Bg`), BGM, `Filter`, and a `CharacterList` of per-line character
-  `Name`/`Face`/`Body`/`Pos`/`Emotion`/`Telling` attributes (portraits are composited from
-  parts, not flat images — see Visual System). One shared schema applied across ~250+ files
-  (main chapters `Chapter_1_*` through `Chapter_8_*`, plus side-story/reception scripts
-  `Chapter_100_*`, `Chapter_101_*`, `Chapter_1000_*`, etc). New parser, applied broadly rather
-  than per-file bespoke code.
+- **Dialogue/Story — corrected after reading full file contents, not just excerpts.** Two
+  genuinely separate data families exist, and the actual narrative TEXT is not in the file the
+  original spec draft assumed:
+  - **`Chapter_X_Y_Z.txt`** (Korean root, XML root `SceneEffect > Dialogue[@ID]`): scene
+    **staging** only — background (`Bg`), BGM, `Filter`, per-line character
+    `Name`/`Face`/`Body`/`Pos`/`Emotion`/`Telling` attributes. Verified by reading an entire
+    file end to end: **no dialogue text exists in this family at all**, on any language.
+  - **`Text/English/EN_Chapter{1-8,100,101,999,1000}.txt`** (self-contained, English-only, XML
+    root `ScenarioRoot > Chapter > Group > Episode > Place > Dialog[@ID][@Model] > Teller,
+    Title, VoiceFile, Content`): this is where the actual readable story text lives — one file
+    per chapter/side-story group, hierarchically organized by Group→Episode→Place, each with
+    an ordered list of dialogue lines (speaker model, voice file reference, and the spoken
+    line itself).
+  - These two families are not yet confirmed to cross-reference by ID (the Dialog IDs in
+    `EN_Chapter1.txt` don't obviously line up 1:1 with the `Dialogue ID`s in
+    `Chapter_1_2_1.txt`-style files). **Scope for this pass**: parse `EN_Chapter*.txt` only —
+    self-contained, delivers real reader value (an actual readable story), needs no
+    Korean/English join. Linking each line back to its `Chapter_X_Y_Z.txt` staging data (for
+    background/BGM/character-art cues in the Story reader UI) is deferred until the site
+    actually needs it — building that link now, without knowing the real mapping, risks
+    guessing wrong the same way the `EquipPage` `TextId` bug did.
 
 ## Pipeline
 
