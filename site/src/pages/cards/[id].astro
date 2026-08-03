@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LayeredFrame from "../../components/ui/LayeredFrame.astro";
+import DiceChip from "../../components/cards/DiceChip.astro";
+import { loadCards } from "../../lib/cards.js";
+
+export function getStaticPaths() {
+  const cards = loadCards();
+  return cards.map((card) => ({
+    params: { id: card.id },
+    props: { card },
+  }));
+}
+
+const { card } = Astro.props;
+---
+<BaseLayout title={card.name}>
+  <main class="card-detail-page">
+    <LayeredFrame class="card-detail-frame">
+      {
+        card.artworkPath && (
+          <img class="card-detail__art" src={`/${card.artworkPath}`} alt={card.name} />
+        )
+      }
+      <h1>{card.name}</h1>
+      <p class="card-detail__meta">
+        {card.rarity} · {card.range} · Cost {card.cost} · Chapter {card.chapter}
+      </p>
+      <div class="card-detail__behaviours">
+        {card.behaviours.map((behaviour) => <DiceChip behaviour={behaviour} />)}
+      </div>
+    </LayeredFrame>
+  </main>
+</BaseLayout>
+
+<style>
+  .card-detail-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  .card-detail__art {
+    width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .card-detail__meta {
+    opacity: 0.8;
+  }
+  .card-detail__behaviours {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+</style>

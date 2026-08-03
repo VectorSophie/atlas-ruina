@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CardTile from "../../components/cards/CardTile.astro";
+import { loadCards } from "../../lib/cards.js";
+
+const cards = loadCards();
+---
+<BaseLayout title="Cards">
+  <main class="card-list-page">
+    <h1>Cards</h1>
+    <p>{cards.length} cards</p>
+    <div class="card-grid">
+      {cards.map((card) => <CardTile card={card} />)}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .card-list-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+</style>
